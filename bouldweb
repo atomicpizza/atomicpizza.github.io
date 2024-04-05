@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>welcome :)</title>
+  <link href="styles.css" rel="stylesheet" type="text/css">
+  <link rel="icon" type="image/png" href="/favicon.png/">
+</head>
+
+<body>
+<!-- Feel free to change this text here -->
+<p>
+  boulders
+  </p>
+<p>
+  desc: you are buld avoid boulders
+</p>
+<p>
+wasd to move
+</p>
+  <iframe src="boulders.html" width="800" height="600"></iframe>
+
+
+</body></html>
