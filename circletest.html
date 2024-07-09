@@ -28,15 +28,26 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        #fullscreen-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div id="game-area">
+        <button id="fullscreen-btn">Fullscreen</button>
         <div id="circle"></div>
     </div>
 
     <script>
-        // JavaScript for handling swipe input and moving the circle
+        const gameArea = document.getElementById('game-area');
         const circle = document.getElementById('circle');
         let posX = 50; // Initial X position
         let posY = 50; // Initial Y position
@@ -87,6 +98,18 @@
                 } else {
                     moveCircle('up');
                 }
+            }
+        });
+
+        // Fullscreen button functionality
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        fullscreenBtn.addEventListener('click', () => {
+            if (gameArea.requestFullscreen) {
+                gameArea.requestFullscreen();
+            } else if (gameArea.webkitRequestFullscreen) { /* Safari */
+                gameArea.webkitRequestFullscreen();
+            } else if (gameArea.msRequestFullscreen) { /* IE11 */
+                gameArea.msRequestFullscreen();
             }
         });
     </script>
