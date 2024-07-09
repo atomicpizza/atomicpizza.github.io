@@ -93,6 +93,14 @@
 
             circle.style.left = newX + 'px';
             circle.style.top = newY + 'px';
+            changeColor();
+        }
+
+        function changeColor() {
+            circle.style.backgroundColor = 'green';
+            setTimeout(() => {
+                circle.style.backgroundColor = 'red';
+            }, 500);
         }
 
         fullscreenBtn.addEventListener('click', function() {
