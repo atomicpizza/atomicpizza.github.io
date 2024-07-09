@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Swipe Game</title>
+    <title>Swipe Game</title>
     <style>
-        body {
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #333;
         }
-        #game-area {
-            width: 900px;
-            height: 900px;
+        #game-container {
+            width: 500px;
+            height: 500px;
             background-color: black;
             position: relative;
         }
@@ -24,92 +27,81 @@
             background-color: red;
             border-radius: 50%;
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 225px;
+            left: 225px;
         }
         #fullscreen-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             padding: 10px 20px;
-            background-color: #3498db;
-            color: white;
-            border: none;
+            font-size: 16px;
             cursor: pointer;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
-    <div id="game-area">
-        <button id="fullscreen-btn">Fullscreen</button>
+    <div id="game-container">
         <div id="circle"></div>
     </div>
+    <button id="fullscreen-btn">Toggle Fullscreen</button>
 
     <script>
-        const gameArea = document.getElementById('game-area');
         const circle = document.getElementById('circle');
-        let posX = 50; // Initial X position
-        let posY = 50; // Initial Y position
+        const gameContainer = document.getElementById('game-container');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
 
-        function moveCircle(direction) {
-            switch (direction) {
-                case 'up':
-                    posY -= 50;
-                    break;
-                case 'down':
-                    posY += 50;
-                    break;
-                case 'left':
-                    posX -= 50;
-                    break;
-                case 'right':
-                    posX += 50;
-                    break;
-                default:
-                    return;
+        let startX, startY;
+
+        gameContainer.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        gameContainer.addEventListener('touchend', function(e) {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            let moveX = 0;
+            let moveY = 0;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                moveX = deltaX > 0 ? 5 : -5;
+            } else {
+                moveY = deltaY > 0 ? 5 : -5;
             }
-            // Update circle position
-            circle.style.top = posY + '%';
-            circle.style.left = posX + '%';
+
+            moveCircle(moveX, moveY);
+        });
+
+        function moveCircle(moveX, moveY) {
+            const currentX = parseInt(circle.style.left);
+            const currentY = parseInt(circle.style.top);
+            let newX = currentX + moveX;
+            let newY = currentY + moveY;
+
+            // Restrict the circle within the game container
+            if (newX < 0) newX = 0;
+            if (newY < 0) newY = 0;
+            if (newX > 450) newX = 450; // 500px container - 50px circle
+            if (newY > 450) newY = 450; // 500px container - 50px circle
+
+            circle.style.left = newX + 'px';
+            circle.style.top = newY + 'px';
         }
 
-        // Event listener for swipe detection
-        let startX, startY, distX, distY;
-        document.addEventListener('touchstart', function(e) {
-            startX = e.changedTouches[0].clientX;
-            startY = e.changedTouches[0].clientY;
-        });
-
-        document.addEventListener('touchend', function(e) {
-            distX = e.changedTouches[0].clientX - startX;
-            distY = e.changedTouches[0].clientY - startY;
-            
-            // Determine swipe direction
-            if (Math.abs(distX) > Math.abs(distY)) {
-                if (distX > 0) {
-                    moveCircle('right');
-                } else {
-                    moveCircle('left');
-                }
+        fullscreenBtn.addEventListener('click', function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
             } else {
-                if (distY > 0) {
-                    moveCircle('down');
-                } else {
-                    moveCircle('up');
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
                 }
-            }
-        });
-
-        // Fullscreen button functionality
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
-        fullscreenBtn.addEventListener('click', () => {
-            if (gameArea.requestFullscreen) {
-                gameArea.requestFullscreen();
-            } else if (gameArea.webkitRequestFullscreen) { /* Safari */
-                gameArea.webkitRequestFullscreen();
-            } else if (gameArea.msRequestFullscreen) { /* IE11 */
-                gameArea.msRequestFullscreen();
             }
         });
     </script>
