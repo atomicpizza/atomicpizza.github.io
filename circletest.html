@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Swipe Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #game-area {
+            width: 900px;
+            height: 900px;
+            background-color: black;
+            position: relative;
+        }
+        #circle {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-area">
+        <div id="circle"></div>
+    </div>
+
+    <script>
+        // JavaScript for handling swipe input and moving the circle
+        const circle = document.getElementById('circle');
+        let posX = 50; // Initial X position
+        let posY = 50; // Initial Y position
+
+        function moveCircle(direction) {
+            switch (direction) {
+                case 'up':
+                    posY -= 50;
+                    break;
+                case 'down':
+                    posY += 50;
+                    break;
+                case 'left':
+                    posX -= 50;
+                    break;
+                case 'right':
+                    posX += 50;
+                    break;
+                default:
+                    return;
+            }
+            // Update circle position
+            circle.style.top = posY + '%';
+            circle.style.left = posX + '%';
+        }
+
+        // Event listener for swipe detection
+        let startX, startY, distX, distY;
+        document.addEventListener('touchstart', function(e) {
+            startX = e.changedTouches[0].clientX;
+            startY = e.changedTouches[0].clientY;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            distX = e.changedTouches[0].clientX - startX;
+            distY = e.changedTouches[0].clientY - startY;
+            
+            // Determine swipe direction
+            if (Math.abs(distX) > Math.abs(distY)) {
+                if (distX > 0) {
+                    moveCircle('right');
+                } else {
+                    moveCircle('left');
+                }
+            } else {
+                if (distY > 0) {
+                    moveCircle('down');
+                } else {
+                    moveCircle('up');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
