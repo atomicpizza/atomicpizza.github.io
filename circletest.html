@@ -79,25 +79,26 @@
         const rightBtn = document.getElementById('right-btn');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
 
+        let currentX = 225;
+        let currentY = 225;
+
         function moveCircle(moveX, moveY) {
-            const currentX = parseInt(circle.style.left);
-            const currentY = parseInt(circle.style.top);
-            let newX = currentX + moveX;
-            let newY = currentY + moveY;
+            currentX += moveX;
+            currentY += moveY;
 
             // Restrict the circle within the game container
-            if (newX < 0) newX = 0;
-            if (newY < 0) newY = 0;
-            if (newX > 450) newX = 450; // 500px container - 50px circle
-            if (newY > 450) newY = 450; // 500px container - 50px circle
+            if (currentX < 0) currentX = 0;
+            if (currentY < 0) currentY = 0;
+            if (currentX > 450) currentX = 450; // 500px container - 50px circle
+            if (currentY > 450) currentY = 450; // 500px container - 50px circle
 
-            circle.style.left = newX + 'px';
-            circle.style.top = newY + 'px';
+            circle.style.left = currentX + 'px';
+            circle.style.top = currentY + 'px';
             changeColor();
         }
 
         function changeColor() {
-            circle.style.backgroundColor = 'green';
+            circle.style.backgroundColor = 'blue';
             setTimeout(() => {
                 circle.style.backgroundColor = 'red';
             }, 500);
@@ -120,4 +121,3 @@
     </script>
 </body>
 </html>
-
