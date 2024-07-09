@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swipe Game</title>
+    <title>Button Controlled Game</title>
     <style>
         body, html {
             margin: 0;
@@ -14,12 +14,14 @@
             align-items: center;
             height: 100vh;
             background-color: #333;
+            flex-direction: column;
         }
         #game-container {
             width: 500px;
             height: 500px;
             background-color: black;
             position: relative;
+            margin-bottom: 20px;
         }
         #circle {
             width: 50px;
@@ -30,15 +32,26 @@
             top: 225px;
             left: 225px;
         }
+        .dpad {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .dpad-row {
+            display: flex;
+        }
+        .dpad button {
+            width: 50px;
+            height: 50px;
+            margin: 5px;
+            font-size: 20px;
+            cursor: pointer;
+        }
         #fullscreen-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
-            z-index: 10;
         }
     </style>
 </head>
@@ -46,38 +59,25 @@
     <div id="game-container">
         <div id="circle"></div>
     </div>
+    <div class="dpad">
+        <div class="dpad-row">
+            <button id="up-btn">▲</button>
+        </div>
+        <div class="dpad-row">
+            <button id="left-btn">◀</button>
+            <button id="down-btn">▼</button>
+            <button id="right-btn">▶</button>
+        </div>
+    </div>
     <button id="fullscreen-btn">Toggle Fullscreen</button>
 
     <script>
         const circle = document.getElementById('circle');
-        const gameContainer = document.getElementById('game-container');
+        const upBtn = document.getElementById('up-btn');
+        const downBtn = document.getElementById('down-btn');
+        const leftBtn = document.getElementById('left-btn');
+        const rightBtn = document.getElementById('right-btn');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
-
-        let startX, startY;
-
-        gameContainer.addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        });
-
-        gameContainer.addEventListener('touchend', function(e) {
-            const endX = e.changedTouches[0].clientX;
-            const endY = e.changedTouches[0].clientY;
-
-            const deltaX = endX - startX;
-            const deltaY = endY - startY;
-
-            let moveX = 0;
-            let moveY = 0;
-
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                moveX = deltaX > 0 ? 50 : -50;
-            } else {
-                moveY = deltaY > 0 ? 50 : -50;
-            }
-
-            moveCircle(moveX, moveY);
-        });
 
         function moveCircle(moveX, moveY) {
             const currentX = parseInt(circle.style.left);
@@ -102,6 +102,11 @@
                 circle.style.backgroundColor = 'red';
             }, 500);
         }
+
+        upBtn.addEventListener('click', () => moveCircle(0, -50));
+        downBtn.addEventListener('click', () => moveCircle(0, 50));
+        leftBtn.addEventListener('click', () => moveCircle(-50, 0));
+        rightBtn.addEventListener('click', () => moveCircle(50, 0));
 
         fullscreenBtn.addEventListener('click', function() {
             if (!document.fullscreenElement) {
